@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сюрприз для Айнуры</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #222;
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+        }
+        h1 {
+            margin-bottom: 20px;
+            transition: opacity 0.5s;
+        }
+        .buttons-container {
+            display: flex;
+            gap: 20px;
+        }
+        .button {
+            padding: 10px 20px;
+            cursor: pointer;
+            border: none;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        .yes {
+            background-color: green;
+            color: white;
+            font-size: 20px; /* Начальный размер */
+        }
+        .no {
+            background-color: red;
+            color: white;
+            font-size: 20px; /* Фиксированный размер */
+        }
+        .hidden {
+            display: none;
+        }
+        .sticker {
+            width: 300px;
+            height: auto;
+        }
+        .celebration-text {
+            font-size: 30px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .bottom-gif {
+            position: absolute;
+            bottom: 20px;
+            width: 200px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="question">Айнура, ты будешь моей Веном?</h1>
+    <div class="buttons-container">
+        <div>
+            <button class="button yes" onclick="showSticker()">ДА</button>
+        </div>
+        <div>
+            <button class="button no" onclick="changeNoText()">НЕТ</button>
+        </div>
+    </div>
+    <div id="celebration-text" class="celebration-text">УРАОАОААОАОАОАОАОАОАОАОАОАООАОАОА</div>
+    <video id="sticker" class="hidden sticker" autoplay loop>
+        <source src="sticker.webm" type="video/webm">
+    </video>
+    <video id="bottom-gif" class="bottom-gif" autoplay loop muted>
+        <source src="bottom.webm" type="video/webm">
+    </video>
+    <script>
+        let noButton = document.querySelector('.no');
+        let yesButton = document.querySelector('.yes');
+        let question = document.getElementById('question');
+        let sticker = document.getElementById('sticker');
+        let bottomGif = document.getElementById('bottom-gif');
+        let celebrationText = document.getElementById('celebration-text');
+        let noTexts = [
+            "В смысле нет?😠", "Подумай ещё раз", "Уверена?", "Ты серьёзно?", 
+            "Не ну ты охуела", "Ты уверена в своём ответе?", "Может всё-таки ДА?", 
+            "Я тебе сейчас тресну😠", "Ладно солнышко, всё хватит давай уже выбирай ДА", "Ах ты гаааааад", "Всё, теперь я не дам тебе нажать на НЕТ, хыхыхыхыхыхыхыхых"
+        ];
+        let noIndex = 0;
+        let lockNoButton = false;
+
+        function changeNoText() {
+            if (lockNoButton) return;
+            if (noIndex < noTexts.length) {
+                noButton.textContent = noTexts[noIndex];
+                if (noIndex >= noTexts.length - 2) {
+                    lockNoButton = true;
+                }
+                noIndex++;
+                increaseYes();
+            }
+        }
+        
+        function increaseYes() {
+            let yesSize = parseFloat(window.getComputedStyle(yesButton).fontSize);
+            yesButton.style.fontSize = (yesSize * 1.3) + 'px'; // Увеличиваем размер на 30%
+        }
+        
+        function showSticker() {
+            document.querySelector('.buttons-container').classList.add('hidden');
+            question.style.opacity = '0';
+            celebrationText.style.display = 'block';
+            sticker.classList.remove('hidden');
+            sticker.play();
+
+            // Скрываем гифку bottom.webm
+            bottomGif.classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
